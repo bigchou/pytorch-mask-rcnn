@@ -73,14 +73,14 @@ class Config(object):
 
     # Non-max suppression threshold to filter RPN proposals.
     # You can reduce this during training to generate more propsals.
-    RPN_NMS_THRESHOLD = 0.7
+    RPN_NMS_THRESHOLD = 0.0
 
     # How many anchors per image to use for RPN training
     RPN_TRAIN_ANCHORS_PER_IMAGE = 256
 
     # ROIs kept after non-maximum supression (training and inference)
     POST_NMS_ROIS_TRAINING = 2000
-    POST_NMS_ROIS_INFERENCE = 1000
+    POST_NMS_ROIS_INFERENCE = 1
 
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
@@ -126,7 +126,7 @@ class Config(object):
 
     # Minimum probability value to accept a detected instance
     # ROIs below this threshold are skipped
-    DETECTION_MIN_CONFIDENCE = 0.7
+    DETECTION_MIN_CONFIDENCE = 0.0
 
     # Non-maximum suppression threshold for detection
     DETECTION_NMS_THRESHOLD = 0.3
