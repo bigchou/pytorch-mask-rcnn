@@ -745,8 +745,9 @@ def refine_detections(rois, probs, deltas, window, config):
     """
 
     # Class IDs per ROI
-    _, class_ids = torch.max(probs, dim=1)
-
+    _, class_ids = torch.max(probs[:, 1:], dim=1)#_, class_ids = torch.max(probs, dim=1)
+    class_ids += 1
+    
     # Class probability of the top class of each ROI
     # Class-specific bounding box deltas
     idx = torch.arange(class_ids.size()[0]).long()
@@ -761,7 +762,8 @@ def refine_detections(rois, probs, deltas, window, config):
     if config.GPU_COUNT:
         std_dev = std_dev.cuda()
     refined_rois = apply_box_deltas(rois, deltas_specific * std_dev)
-
+    #import pdb
+    #pdb.set_trace()
     # Convert coordiates to image domain
     height, width = config.IMAGE_SHAPE[:2]
     scale = Variable(torch.from_numpy(np.array([height, width, height, width])).float(), requires_grad=False)
@@ -784,6 +786,7 @@ def refine_detections(rois, probs, deltas, window, config):
     if config.DETECTION_MIN_CONFIDENCE:
         keep_bool = keep_bool & (class_scores >= config.DETECTION_MIN_CONFIDENCE)
     keep = torch.nonzero(keep_bool)[:,0]
+    
 
     # Apply per-class NMS
     pre_nms_class_ids = class_ids[keep.data]
